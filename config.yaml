@@ -1,0 +1,17 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraMounts:
+  - hostPath: /tmp/audit
+    containerPath: /etc/kubernetes/pki/audit
+    readOnly: False
+kubeadmConfigPatches:
+- |
+  kind: ClusterConfiguration
+  metadata:
+    name: config
+  apiServer:
+    extraArgs:
+      "audit-policy-file": "/etc/kubernetes/pki/audit/policy.yaml"
+      "audit-log-path": "/etc/kubernetes/pki/audit/audit.log"

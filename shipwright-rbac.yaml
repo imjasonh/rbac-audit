@@ -1,0 +1,87 @@
+metadata:
+  creationTimestamp: null
+  name: generated-minimal-role
+  namespace: shipwright-build
+rules:
+- apiGroups:
+  - v1
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - get
+  - update
+- apiGroups:
+  - v1
+  resources:
+  - events
+  verbs:
+  - create
+---
+metadata:
+  creationTimestamp: null
+  name: generated-minimal-cluster-role
+rules:
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - buildruns
+  verbs:
+  - list
+  - update
+  - watch
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - buildruns/status
+  verbs:
+  - update
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - builds
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - builds/status
+  verbs:
+  - update
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - buildstrategies
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - shipwright.io/v1alpha1
+  resources:
+  - clusterbuildstrategies
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - tekton.dev/v1beta1
+  resources:
+  - taskruns
+  verbs:
+  - create
+  - list
+  - watch
+- apiGroups:
+  - v1
+  resources:
+  - secrets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - v1
+  resources:
+  - serviceaccounts
+  verbs:
+  - list
+  - watch
