@@ -4,9 +4,7 @@ Have you ever wondered whether your controller actually needs all the permission
 
 This repo contains scripts to start a [KinD](https://kind.sigs.k8s.io) cluster configured to keep audit logs for API resource access, then runs e2e tests to exercise the system, then generates RBAC policies for the service account.
 
-It's an early demo, not yet generalized for any system.
-
-The tools expect to generate two RBAC policies:
+The tools generate two RBAC policies:
 
 1. A namespaced `Role` for the namespace the controller runs inside, consisting of requests for resources in that SA's namespace
 1. A cluster-scoped `ClusterRole` for any resources accessed outside of the controller namespace.
@@ -14,6 +12,7 @@ The tools expect to generate two RBAC policies:
 ## Caveats
 
 - Only API requests made during e2e tests are considered; you _have_ written comprehensive e2e tests, right? ..._Right?!_
+- It's an early demo, not yet generalized for any system.
 - This is hacky, buggy software. Don't rely on it for anything mission-critical. Manually inspect the diff and use your human brain.
 
 ## Examples
@@ -48,6 +47,11 @@ go run ./ --ns shipwright-build --s system:serviceaccount:shipwright-build:shipw
 ```
 
 See [shipwright-rbac.yaml](./shipwright-rbac.yaml)
+
+## TODO
+
+- concisely diff two policies to determine gaps (canonicalizing RBAC rule YAMLs)
+- generate Markdown from RBAC policies to easily communicate permissions to users
 
 ## Acknowledgements
 
