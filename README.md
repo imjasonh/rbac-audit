@@ -2,7 +2,8 @@
 
 Have you ever wondered whether your controller actually needs all the permissions it has granted to it? Wonder no more!
 
-This repo contains scripts to start a [KinD](https://kind.sigs.k8s.io) cluster configured to keep audit logs for API resource access, then runs e2e tests to exercise the system, then generates readable RBAC policies for the service account.
+This repo contains scripts to start a [KinD](https://kind.sigs.k8s.io) cluster configured to keep audit logs for API resource access.
+You can run e2e tests against this cluster to exercise your system, then run `main.go` to generate a readable RBAC policy for your controller's service account.
 
 The tools generate two RBAC policies:
 
@@ -19,30 +20,19 @@ The tools generate two RBAC policies:
 
 ### [Tekton Pipelines](https://github.com/tektoncd/pipeline)
 
-Run tests and collect logs:
-
 ```
-./rbac_audit.sh ./tekton-e2e.sh
-go run ./ > tekton-rbac.yaml
+./kind_audit_cluster.sh       # setup cluster
+./tekton-e2e.sh               # run e2e tests
+go run ./ > tekton-rbac.yaml  # generate RBAC policy
 ```
 
 See [tekton-rbac.yaml](./tekton-rbac.yaml)
 
 ### [Shipwright Build](https://github.com/shipwright-io/build)
 
-Overwrite policy.yaml to collect logs for the Shipwright SA, then run tests and collect logs:
-
 ```
-cat <<EOF > policy.yaml
-apiVersion: audit.k8s.io/v1beta1
-kind: Policy
-rules:
-- level: Metadata
-  users: ["system:serviceaccount:shipwright-build:shipwright-build-controller"]
-  stages:
-  - ResponseComplete
-EOF
-./rbac_audit.sh ./shipwright-e2e.sh
+./kind_audit_cluster.sh shipwright-build shipwright-build-controller
+./shipwright-e2e.sh
 go run ./ --ns shipwright-build --s system:serviceaccount:shipwright-build:shipwright-build-controller > shipwright-rbac.yaml
 ```
 

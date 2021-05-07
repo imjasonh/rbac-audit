@@ -1,8 +1,0 @@
-apiVersion: audit.k8s.io/v1beta1
-kind: Policy
-rules:
-- level: Metadata
-  users: ["system:serviceaccount:tekton-pipelines:tekton-pipelines-controller"]
-  #users: ["system:serviceaccount:shipwright-build:shipwright-build-controller"]
-  stages:
-  - ResponseComplete
