@@ -16,8 +16,8 @@ import (
 
 var (
 	auditLog       = flag.String("f", "/tmp/audit/audit.log", "Audit log file to process")
-	serviceAccount = flag.String("s", "system:serviceaccount:tekton-pipelines:tekton-pipelines-controller", "ServiceAccount name to filter for")
-	namespace      = flag.String("ns", "tekton-pipelines", "Special system namespace")
+	serviceAccount = flag.String("serviceaccount", "tekton-pipelines-controller", "ServiceAccount name to filter for")
+	namespace      = flag.String("namespace", "tekton-pipelines", "Special system namespace")
 )
 
 var tmpl = template.Must(template.New("").Parse(`apiVersion: rbac.authorization.k8s.io/v1
@@ -60,7 +60,7 @@ func main() {
 			continue
 		}
 
-		if evt.User.Username != *serviceAccount {
+		if evt.User.Username != fmt.Sprintf("system:serviceaccount:%s:%s", *namespace, *serviceAccount) {
 			continue
 		}
 

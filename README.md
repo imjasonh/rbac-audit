@@ -28,20 +28,29 @@ go run ./ > tekton-rbac.yaml  # generate RBAC policy
 
 See [tekton-rbac.yaml](./tekton-rbac.yaml)
 
-### [Shipwright Build](https://github.com/shipwright-io/build)
+### [Shipwright Build](https://github.com/shipwright-io/build) and other systems
+
+By default, the tools track access by the `tekton-pipelines-controller` SA, in the `tekton-pipelines` namespace.
+
+You can override these with args to `./kind_audit_cluster.sh` and `main.go`:
 
 ```
 ./kind_audit_cluster.sh shipwright-build shipwright-build-controller
-./shipwright-e2e.sh
-go run ./ --ns shipwright-build --s system:serviceaccount:shipwright-build:shipwright-build-controller > shipwright-rbac.yaml
+./shipwright-e2e.sh  # run e2e tests
+go run ./ \
+    --namespace shipwright-build \
+    --serviceaccount shipwright-build-controller > shipwright-rbac.yaml
 ```
 
 See [shipwright-rbac.yaml](./shipwright-rbac.yaml)
 
 ## TODO
 
+- attempt to further limit policies to only `resourceNames` that are accessed
 - concisely diff two policies to determine gaps (canonicalizing RBAC rule YAMLs)
 - generate Markdown from RBAC policies to easily communicate permissions to users
+- replicate audit2rbac's awesome demo
+- have `kind_audit_cluster.sh` replace your previous kubeconfig when it's done with the cluster
 
 ## Acknowledgements
 
