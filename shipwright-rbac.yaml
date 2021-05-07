@@ -5,11 +5,11 @@ metadata:
   namespace: shipwright-build
 spec:
   rules:
-  - apiGroups: ['v1']
+  - apiGroups: ['']
     resources: ['configmaps']
     verbs:     ['create', 'get', 'update']
 
-  - apiGroups: ['v1']
+  - apiGroups: ['']
     resources: ['events']
     verbs:     ['create']
 
@@ -20,31 +20,31 @@ metadata:
   name: generated-minimal-cluster-role
 spec:
   rules:
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['buildruns']
     verbs:     ['list', 'update', 'watch']
 
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['buildruns/status']
     verbs:     ['update']
 
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['builds']
     verbs:     ['list', 'watch']
 
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['builds/status']
     verbs:     ['update']
 
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['buildstrategies']
     verbs:     ['list', 'watch']
 
-  - apiGroups: ['shipwright.io/v1alpha1']
+  - apiGroups: ['shipwright.io']
     resources: ['clusterbuildstrategies']
     verbs:     ['list', 'watch']
 
-  - apiGroups: ['tekton.dev/v1beta1']
+  - apiGroups: ['tekton.dev']
     resources: ['taskruns']
     verbs:     ['create', 'list', 'watch']
 

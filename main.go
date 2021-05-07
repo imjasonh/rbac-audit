@@ -8,7 +8,6 @@ import (
 	"log"
 	"os"
 	"sort"
-	"strings"
 	"text/template"
 
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -119,11 +118,9 @@ func (i items) toPolicyRules() []rbacv1.PolicyRule {
 			vbs = append(vbs, k)
 		}
 		sort.Strings(vbs)
-		apigroup := fmt.Sprintf("%s/%s", gvr.APIGroup, gvr.APIVersion)
-		apigroup = strings.TrimPrefix(apigroup, "/")
 		pr := rbacv1.PolicyRule{
 			Verbs:     vbs,
-			APIGroups: []string{apigroup},
+			APIGroups: []string{gvr.APIGroup},
 			Resources: []string{gvr.Resource},
 		}
 		if gvr.Subresource != "" {
