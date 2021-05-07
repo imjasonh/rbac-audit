@@ -1,141 +1,86 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
-  creationTimestamp: null
   name: generated-minimal-role
   namespace: tekton-pipelines
-rules:
-- apiGroups:
-  - coordination.k8s.io/v1
-  resources:
-  - leases
-  verbs:
-  - create
-  - get
-  - update
-- apiGroups:
-  - v1
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
+spec:
+  rules:
+  - apiGroups: ['coordination.k8s.io/v1']
+    resources: ['leases']
+    verbs:     ['create', 'get', 'update']
+
+  - apiGroups: ['v1']
+    resources: ['configmaps']
+    verbs:     ['get', 'list', 'watch']
+
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
 metadata:
-  creationTimestamp: null
   name: generated-minimal-cluster-role
-rules:
-- apiGroups:
-  - tekton.dev/v1alpha1
-  resources:
-  - conditions
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - tekton.dev/v1alpha1
-  resources:
-  - pipelineresources
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - tekton.dev/v1alpha1
-  resources:
-  - runs
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - clustertasks
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - pipelineruns
-  verbs:
-  - get
-  - list
-  - update
-  - watch
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - pipelineruns/status
-  verbs:
-  - update
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - pipelines
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - taskruns
-  verbs:
-  - create
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - taskruns/status
-  verbs:
-  - update
-- apiGroups:
-  - tekton.dev/v1beta1
-  resources:
-  - tasks
-  verbs:
-  - list
-  - watch
-- apiGroups:
-  - v1
-  resources:
-  - events
-  verbs:
-  - create
-  - patch
-- apiGroups:
-  - v1
-  resources:
-  - limitranges
-  verbs:
-  - list
-- apiGroups:
-  - v1
-  resources:
-  - persistentvolumeclaims
-  verbs:
-  - get
-- apiGroups:
-  - v1
-  resources:
-  - pods
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - watch
-- apiGroups:
-  - v1
-  resources:
-  - secrets
-  verbs:
-  - get
-- apiGroups:
-  - v1
-  resources:
-  - serviceaccounts
-  verbs:
-  - get
+spec:
+  rules:
+  - apiGroups: ['tekton.dev/v1alpha1']
+    resources: ['conditions']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['tekton.dev/v1alpha1']
+    resources: ['pipelineresources']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['tekton.dev/v1alpha1']
+    resources: ['runs']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['clustertasks']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['pipelineruns']
+    verbs:     ['get', 'list', 'update', 'watch']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['pipelineruns/status']
+    verbs:     ['update']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['pipelines']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['taskruns']
+    verbs:     ['create', 'get', 'list', 'patch', 'update', 'watch']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['taskruns/status']
+    verbs:     ['update']
+
+  - apiGroups: ['tekton.dev/v1beta1']
+    resources: ['tasks']
+    verbs:     ['list', 'watch']
+
+  - apiGroups: ['v1']
+    resources: ['events']
+    verbs:     ['create', 'patch']
+
+  - apiGroups: ['v1']
+    resources: ['limitranges']
+    verbs:     ['list']
+
+  - apiGroups: ['v1']
+    resources: ['persistentvolumeclaims']
+    verbs:     ['get']
+
+  - apiGroups: ['v1']
+    resources: ['pods']
+    verbs:     ['create', 'delete', 'get', 'list', 'watch']
+
+  - apiGroups: ['v1']
+    resources: ['secrets']
+    verbs:     ['get']
+
+  - apiGroups: ['v1']
+    resources: ['serviceaccounts']
+    verbs:     ['get']
+

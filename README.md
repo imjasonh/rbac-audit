@@ -2,7 +2,7 @@
 
 Have you ever wondered whether your controller actually needs all the permissions it has granted to it? Wonder no more!
 
-This repo contains scripts to start a [KinD](https://kind.sigs.k8s.io) cluster configured to keep audit logs for API resource access, then runs e2e tests to exercise the system, then generates RBAC policies for the service account.
+This repo contains scripts to start a [KinD](https://kind.sigs.k8s.io) cluster configured to keep audit logs for API resource access, then runs e2e tests to exercise the system, then generates readable RBAC policies for the service account.
 
 The tools generate two RBAC policies:
 

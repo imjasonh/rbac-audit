@@ -9,10 +9,9 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"text/template"
 
 	rbacv1 "k8s.io/api/rbac/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kjson "k8s.io/apimachinery/pkg/runtime/serializer/json"
 	"k8s.io/apiserver/pkg/apis/audit"
 )
 
@@ -21,6 +20,25 @@ var (
 	serviceAccount = flag.String("s", "system:serviceaccount:tekton-pipelines:tekton-pipelines-controller", "ServiceAccount name to filter for")
 	namespace      = flag.String("ns", "tekton-pipelines", "Special system namespace")
 )
+
+var tmpl = template.Must(template.New("").Parse(`
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Name }}{{ if .Namespace }}
+  namespace: {{ .Namespace }}{{ end }}
+spec:
+  rules: {{ range .Rules }}
+  - apiGroups: ['{{ index .APIGroups 0 }}']
+    resources: ['{{ index .Resources 0 }}']
+    verbs:     [{{ range $idx, $v := .Verbs }}{{ if $idx }}, {{ end }}'{{ $v }}'{{ end }}]
+  {{ end }}
+`))
+
+type data struct {
+	Name, Namespace, Kind string
+	Rules                 []rbacv1.PolicyRule
+}
 
 func main() {
 	flag.Parse()
@@ -67,24 +85,20 @@ func main() {
 		}
 	}
 
-	r := &rbacv1.Role{
-		ObjectMeta: metav1.ObjectMeta{
-			Namespace: *namespace,
-			Name:      "generated-minimal-role",
-		},
-		Rules: nm.toPolicyRules(),
-	}
-	if err := kjson.NewYAMLSerializer(kjson.DefaultMetaFactory, nil, nil).Encode(r, os.Stdout); err != nil {
+	if err := tmpl.Execute(os.Stdout, data{
+		Name:      "generate-minimal-role",
+		Namespace: *namespace,
+		Kind:      "Role",
+		Rules:     nm.toPolicyRules(),
+	}); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("---")
-	cr := &rbacv1.ClusterRole{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: "generated-minimal-cluster-role",
-		},
+	if err := tmpl.Execute(os.Stdout, data{
+		Name:  "generate-minimal-cluster-role",
+		Kind:  "ClusterRole",
 		Rules: m.toPolicyRules(),
-	}
-	if err := kjson.NewYAMLSerializer(kjson.DefaultMetaFactory, nil, nil).Encode(cr, os.Stdout); err != nil {
+	}); err != nil {
 		log.Fatal(err)
 	}
 }
