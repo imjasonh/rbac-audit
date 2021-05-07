@@ -21,18 +21,17 @@ var (
 	namespace      = flag.String("ns", "tekton-pipelines", "Special system namespace")
 )
 
-var tmpl = template.Must(template.New("").Parse(`
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+var tmpl = template.Must(template.New("").Parse(`apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ .Kind }}
 metadata:
   name: {{ .Name }}{{ if .Namespace }}
   namespace: {{ .Namespace }}{{ end }}
 spec:
-  rules: {{ range .Rules }}
+  rules:{{ range .Rules }}
   - apiGroups: ['{{ index .APIGroups 0 }}']
     resources: ['{{ index .Resources 0 }}']
     verbs:     [{{ range $idx, $v := .Verbs }}{{ if $idx }}, {{ end }}'{{ $v }}'{{ end }}]
-  {{ end }}
+{{ end }}
 `))
 
 type data struct {
@@ -86,7 +85,7 @@ func main() {
 	}
 
 	if err := tmpl.Execute(os.Stdout, data{
-		Name:      "generate-minimal-role",
+		Name:      "generated-minimal-role",
 		Namespace: *namespace,
 		Kind:      "Role",
 		Rules:     nm.toPolicyRules(),
@@ -95,7 +94,7 @@ func main() {
 	}
 	fmt.Println("---")
 	if err := tmpl.Execute(os.Stdout, data{
-		Name:  "generate-minimal-cluster-role",
+		Name:  "generated-minimal-cluster-role",
 		Kind:  "ClusterRole",
 		Rules: m.toPolicyRules(),
 	}); err != nil {
