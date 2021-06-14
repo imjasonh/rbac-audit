@@ -44,6 +44,11 @@ go run ./ \
 
 See [shipwright-rbac.yaml](./shipwright-rbac.yaml)
 
+## Known Issues
+
+- The [`OwnerReferencesPermissionEnforcement`](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#ownerreferencespermissionenforcement) admission controller requires additional permissions to be able to set `OwnerReferences` on objects, which rbac-audit won't detect.
+  If your controller sets `OwnerReferences`, especially with `blockOwnerDeletion`, and you expect to have this admission controller enabled, take this into consideration.
+
 ## TODO
 
 - attempt to further limit policies to only `resourceNames` that are accessed
